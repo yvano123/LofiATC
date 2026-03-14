@@ -125,6 +125,7 @@
 				<button
 					onclick={() => {
 						volume -= 0.005;
+						setCookie('atcVolume', volume, 1000);
 					}}
 					class="hover:cursor-pointer">-</button
 				>
@@ -141,6 +142,7 @@
 				<button
 					onclick={() => {
 						volume += 0.005;
+						setCookie('atcVolume', volume, 1000);
 					}}
 					class="hover:cursor-pointer">+</button
 				>
@@ -150,6 +152,7 @@
 				<button
 					onclick={() => {
 						musicVolume -= 0.005;
+						setCookie('musicVolume', musicVolume, 1000);
 					}}
 					class="hover:cursor-pointer">-</button
 				>
@@ -166,6 +169,7 @@
 				<button
 					onclick={() => {
 						musicVolume += 0.005;
+						setCookie('musicVolume', musicVolume, 1000);
 					}}
 					class="hover:cursor-pointer">+</button
 				>
