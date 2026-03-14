@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { airports } from '$lib/Constants/Airports';
 	import { onMount } from 'svelte';
+	import { isIfStatement } from 'typescript';
 
 	let as: HTMLAudioElement;
 	let ms: HTMLAudioElement;
@@ -12,6 +13,25 @@
 	function checkStates() {
 		connected = as?.readyState;
 		playing = !as?.paused || !ms?.paused;
+	}
+	function setCookie(name: string, value: any, days: number) {
+		var expires = '';
+		if (days) {
+			var date = new Date();
+			date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+			expires = '; expires=' + date.toUTCString();
+		}
+		document.cookie = name + '=' + (value || '') + expires + '; path=/';
+	}
+	function getCookie(name: string) {
+		var nameEQ = name + '=';
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+		}
+		return null;
 	}
 	function togglePlaying() {
 		if (as.paused) {
@@ -25,7 +45,14 @@
 		}
 	}
 	let player;
-	onMount(() => {});
+	onMount(() => {
+		let mv = getCookie('musicVolume');
+		let av = getCookie('atcVolume');
+
+		if (mv != null) musicVolume = Number.parseFloat(mv);
+		if (av != null) volume = Number.parseFloat(av);
+		console.log(mv, av);
+	});
 
 	setInterval(checkStates, 50);
 </script>
@@ -40,7 +67,7 @@
 <audio bind:volume bind:this={as} id="as" hidden> </audio>
 <div class="flex h-lvh items-center justify-center bg-olive-100">
 	<div
-		class="flex aspect-square flex-col items-center justify-between rounded-2xl bg-olive-300 p-4"
+		class="flex aspect-square flex-col items-center justify-between rounded-2xl bg-olive-300 p-8"
 	>
 		<div class="flex flex-col items-center">
 			<div class="flex w-full flex-row items-center justify-between">
@@ -101,7 +128,16 @@
 					}}
 					class="hover:cursor-pointer">-</button
 				>
-				<input bind:value={volume} type="range" min="0" max="1" step="0.005" />
+				<input
+					onchange={() => {
+						setCookie('atcVolume', volume, 1000);
+					}}
+					bind:value={volume}
+					type="range"
+					min="0"
+					max="1"
+					step="0.005"
+				/>
 				<button
 					onclick={() => {
 						volume += 0.005;
@@ -117,7 +153,16 @@
 					}}
 					class="hover:cursor-pointer">-</button
 				>
-				<input bind:value={musicVolume} type="range" min="0" max="1" step="0.005" />
+				<input
+					onchange={() => {
+						setCookie('musicVolume', musicVolume, 1000);
+					}}
+					bind:value={musicVolume}
+					type="range"
+					min="0"
+					max="1"
+					step="0.005"
+				/>
 				<button
 					onclick={() => {
 						musicVolume += 0.005;
@@ -132,5 +177,14 @@
 			class="w-4/10 rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer"
 			>{playing ? 'Pause' : 'Play'}</button
 		>
+		<div class="flex flex-row gap-1">
+			<p class="text-xs text-olive-500">Ad playing?</p>
+			<button
+				onclick={() => {
+					window.location.reload();
+				}}
+				class="text-xs text-olive-600 hover:cursor-pointer hover:underline">Reload the page</button
+			>
+		</div>
 	</div>
 </div>
