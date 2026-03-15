@@ -20,7 +20,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   height: 1rem;
   width: 1rem;
 }
-input{
+input[type="range"]{
     accent-color: oklch(46.6% 0.025 107.3);
 }
 
