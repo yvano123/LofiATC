@@ -67,8 +67,8 @@
 	src="https://live.hunter.fm/lofi_high"
 ></audio>
 <audio bind:volume bind:this={as} id="as" hidden> </audio>
-<div class="relative flex h-lvh items-center justify-center bg-olive-100">
-	<div class="z-20 flex aspect-square h-6/10 flex-col items-center rounded-2xl bg-olive-300 p-8">
+<div class="flex h-lvh items-center justify-center bg-olive-100">
+	<div class="flex aspect-square h-6/10 flex-col items-center rounded-2xl bg-olive-300 p-8">
 		<div class="flex flex-col items-center">
 			<!-- HEADER -->
 
@@ -206,41 +206,41 @@
 			>
 		</div>
 	</div>
-	<div
-		class="z-10 flex h-6/10 w-2/10 flex-col justify-end gap-1 rounded-2xl bg-olive-400 p-5 transition-all {selectOpen
-			? ''
-			: '-ml-100'}"
-	>
-		<div class="flex flex-row gap-1">
-			<input bind:value={searchTerm} class="bg-olive-300" type="text" />
+</div>
+
+<div
+	class="absolute top-0 h-full w-full bg-olive-300 transition-opacity {selectOpen
+		? 'pointer-events-auto opacity-100'
+		: 'pointer-events-none opacity-0'}"
+>
+	<!-- TOP BAR -->
+	<div class="relative h-1/10 w-full text-3xl">
+		<div class="absolute flex h-full w-full items-center justify-end p-3">
 			<button
-				class=""
 				onclick={() => {
 					selectOpen = false;
-				}}>X</button
+				}}
+				class="absolute flex">Back</button
 			>
 		</div>
-		<div class=" flex h-9/10 flex-col gap-0.5 overflow-y-scroll">
-			{#each airports.filter((x) => x.name.toLowerCase().includes(searchTerm) || x.code
-						.toLowerCase()
-						.includes(searchTerm)) as airport}
-				<button
-					onclick={() => {
-						if (as.paused) {
-							as.src = airport.uri;
-							selected = airport.code;
-						} else {
-							as.src = airport.uri;
-							selected = airport.code;
-							as.play();
-						}
-					}}
-					class:border-2={selected == airport?.code}
-					class="rounded- w-9/10 bg-olive-300 p-2 transition-transform hover:scale-105 hover:cursor-pointer"
-					><p>{airport.code}</p>
-					<p>{airport.name}</p></button
-				>
-			{/each}
-		</div>
+		<div class="flex h-full w-full items-center justify-center"><p>SELECT A STATION</p></div>
+	</div>
+	<!-- SEARCH BAR -->
+	<div class="flex flex-col items-center justify-center gap-2">
+		<input
+			class="h-20 w-2/10 rounded-xl bg-olive-400 px-1 text-2xl uppercase"
+			maxlength="4"
+			bind:value={searchTerm}
+			type="text"
+			placeholder="KATL, KJFK, ETC."
+		/>
+
+		{#if !searchTerm}
+			<p>or</p>
+			<button
+				class="h-20 w-2/10 rounded-2xl bg-olive-400 px-1 text-2xl transition-transform hover:scale-105 hover:cursor-pointer"
+				>Random airport</button
+			>
+		{/if}
 	</div>
 </div>
