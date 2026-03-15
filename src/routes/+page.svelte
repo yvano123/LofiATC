@@ -89,7 +89,7 @@
 			<!-- SELECTED STATION -->
 			<div class="mt-3 w-9/10 rounded-xl bg-olive-400 p-3">
 				<div class="flex flex-row items-center justify-between gap-0.5">
-					<p class="pl-2">{airports.find((x) => x.code == selected)?.code ?? ''}</p>
+					<p class="pl-2 font-bold">{airports.find((x) => x.code == selected)?.code ?? ''}</p>
 					<div class="flex flex-row items-center">
 						<p
 							class="text-2xl text-red-500"
@@ -124,14 +124,14 @@
 			</div>
 			<!-- /SELECTED STATION -->
 
-			<div class="my-4 grid grid-cols-6 flex-wrap gap-2"></div>
-			<div class="flex flex-row gap-1">
+			<div class="mt-3 flex flex-row items-center justify-center gap-1">
 				<button
 					onclick={() => {
 						volume -= 0.005;
 						setCookie('atcVolume', volume, 1000);
 					}}
-					class="hover:cursor-pointer">-</button
+					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer"
+					>&ndash;</button
 				>
 				<input
 					onchange={() => {
@@ -148,17 +148,18 @@
 						volume += 0.005;
 						setCookie('atcVolume', volume, 1000);
 					}}
-					class="hover:cursor-pointer">+</button
+					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer">+</button
 				>
 			</div>
-			<p>ATC:{Math.round(volume * 100)}%</p>
+			<p>ATC: {Math.round(volume * 100)}%</p>
 			<div class="flex flex-row gap-1">
 				<button
 					onclick={() => {
 						musicVolume -= 0.005;
 						setCookie('musicVolume', musicVolume, 1000);
 					}}
-					class="hover:cursor-pointer">-</button
+					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer"
+					>&ndash;</button
 				>
 				<input
 					onchange={() => {
@@ -175,14 +176,14 @@
 						musicVolume += 0.005;
 						setCookie('musicVolume', musicVolume, 1000);
 					}}
-					class="hover:cursor-pointer">+</button
+					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer">+</button
 				>
 			</div>
-			<p>Music:{Math.round(musicVolume * 100)}%</p>
+			<p>Music: {Math.round(musicVolume * 100)}%</p>
 		</div>
 		<button
 			onclick={togglePlaying}
-			class="w-4/10 rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer"
+			class="mt-3 mb-1 w-4/10 rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer"
 			>{playing ? 'Pause' : 'Play'}</button
 		>
 		<div class="flex flex-row gap-1">
