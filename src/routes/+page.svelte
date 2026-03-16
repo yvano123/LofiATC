@@ -72,7 +72,7 @@
 	bind:volume={musicVolume}
 	controls
 	hidden
-	src="https://radio.loficafe.net/listen/sleeping/radio.mp3"
+	src="https://boxradio-edge-00.streamafrica.net/lofi"
 ></audio>
 <audio bind:volume bind:this={as} id="as" hidden> </audio>
 <div class="flex h-lvh items-center justify-center bg-olive-100">
@@ -92,7 +92,7 @@
 						<p class="pl-2 font-bold">{airports.find((x) => x.code == selected)?.code ?? ''}</p>
 						<button
 							onclick={() => {
-								rotation += 180;
+								rotation += 360;
 								as.src.includes('s1-fmt2')
 									? (as.src = as.src.replace('s1-fmt2', 's1-bos'))
 									: as.src.includes('s1-bos')
@@ -156,7 +156,7 @@
 			<div class="mt-3 flex flex-row items-center justify-center gap-1">
 				<button
 					onclick={() => {
-						volume -= 0.005;
+						volume = Math.max(volume - 0.005, 0);
 						setCookie('atcVolume', volume, 1000);
 					}}
 					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer"
@@ -174,7 +174,8 @@
 				/>
 				<button
 					onclick={() => {
-						volume += 0.005;
+						volume = Math.min(volume + 0.005, 1);
+
 						setCookie('atcVolume', volume, 1000);
 					}}
 					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer">+</button
@@ -184,7 +185,8 @@
 			<div class="flex flex-row gap-1">
 				<button
 					onclick={() => {
-						musicVolume -= 0.005;
+						musicVolume = Math.max(musicVolume - 0.005, 0);
+
 						setCookie('musicVolume', musicVolume, 1000);
 					}}
 					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer"
@@ -202,7 +204,8 @@
 				/>
 				<button
 					onclick={() => {
-						musicVolume += 0.005;
+						musicVolume = Math.min(musicVolume + 0.005, 1);
+
 						setCookie('musicVolume', musicVolume, 1000);
 					}}
 					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer">+</button
