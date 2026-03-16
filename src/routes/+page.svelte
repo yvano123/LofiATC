@@ -72,7 +72,7 @@
 	bind:volume={musicVolume}
 	controls
 	hidden
-	src="https://stream-156.zeno.fm/0r0xa792kwzuv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiIwcjB4YTc5Mmt3enV2IiwiaG9zdCI6InN0cmVhbS0xNTYuemVuby5mbSIsInRtIjpmYWxzZSwicnR0bCI6NSwianRpIjoiR3BCWWotQTdRLWVySWZCRFl3VngtUSIsImlhdCI6MTc3MzY0ODc4NCwiZXhwIjoxNzczNjQ4ODQ0fQ.bHPs_T-oxBIAnXL6tCfKaPQATQxxS3p2gXtLxruGiEA"
+	src="https://radio.loficafe.net/listen/sleeping/radio.mp3"
 ></audio>
 <audio bind:volume bind:this={as} id="as" hidden> </audio>
 <div class="flex h-lvh items-center justify-center bg-olive-100">
