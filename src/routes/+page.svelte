@@ -3,6 +3,8 @@
 	import { onMount } from 'svelte';
 	import { isIfStatement } from 'typescript';
 	import Cross from '$lib/assets/cross.svg';
+	import Sun from '$lib/assets/sun.svg';
+	import Moon from '$lib/assets/moon.svg';
 	import Refresh from '$lib/assets/refresh.svg';
 
 	let as: HTMLAudioElement;
@@ -20,6 +22,15 @@
 		if (!selectOpen) searchTerm = '';
 	});
 
+	function setDark() {
+		document.documentElement.classList.add('dark');
+		localStorage.setItem('darkmode', 'true');
+	}
+
+	function setLight() {
+		document.documentElement.classList.remove('dark');
+		localStorage.setItem('darkmode', 'false');
+	}
 	function checkStates() {
 		connected = as?.readyState;
 		playing = !as?.paused || !ms?.paused;
@@ -62,6 +73,9 @@
 		if (mv != null) musicVolume = Number.parseFloat(mv);
 		if (av != null) volume = Number.parseFloat(av);
 		console.log(mv, av);
+
+		let dark = localStorage.getItem('darkmode') === 'true';
+		document.documentElement.classList.toggle('dark', dark);
 	});
 
 	setInterval(checkStates, 50);
@@ -75,8 +89,10 @@
 	src="https://boxradio-edge-00.streamafrica.net/lofi"
 ></audio>
 <audio bind:volume bind:this={as} id="as" hidden> </audio>
-<div class="flex h-lvh items-center justify-center bg-olive-100">
-	<div class="flex aspect-square h-6/10 flex-col items-center rounded-2xl bg-olive-300 p-8">
+<div class="flex h-lvh items-center justify-center bg-olive-100 dark:bg-slate-600">
+	<div
+		class="flex aspect-square h-6/10 flex-col items-center rounded-2xl bg-olive-300 p-8 dark:bg-slate-800"
+	>
 		<div class="flex w-full flex-col items-center">
 			<!-- HEADER -->
 
@@ -86,7 +102,7 @@
 			<!-- /HEADER -->
 
 			<!-- SELECTED STATION -->
-			<div class="mt-3 w-9/10 rounded-xl bg-olive-400 p-3">
+			<div class="mt-3 w-9/10 rounded-xl bg-olive-400 p-3 dark:bg-slate-900">
 				<div class="flex flex-row items-center justify-between gap-0.5">
 					<div class="flex flex-row gap-1">
 						<p class="pl-2 font-bold">{airports.find((x) => x.code == selected)?.code ?? ''}</p>
@@ -99,17 +115,17 @@
 										? (as.src = as.src.replace('s1-bos', 's1-fmt2'))
 										: as.src;
 							}}
-							class="group relative rounded-full bg-olive-300 p-1 transition-all hover:scale-105 hover:cursor-pointer {selected
+							class="group relative rounded-full bg-olive-300 p-1 transition-all hover:scale-105 hover:cursor-pointer dark:bg-slate-800 {selected
 								? 'visible'
 								: 'invisible'}"
 						>
 							<span
-								class="absolute z-20 w-max -translate-x-1/2 -translate-y-7 self-center rounded-md bg-olive-200 p-1 text-xs opacity-0 transition-all group-hover:-translate-y-8.5 group-hover:opacity-100"
+								class="absolute z-20 w-max -translate-x-1/2 -translate-y-7 self-center rounded-md bg-olive-200 p-1 text-xs opacity-0 transition-all group-hover:-translate-y-8.5 group-hover:opacity-100 dark:bg-slate-700"
 								>Switch server</span
 							>
 							<!-- Arrow -->
 							<div
-								class="absolute aspect-square w-4 -translate-y-4.5 rotate-45 rounded-xs bg-olive-200 opacity-0 transition-all group-hover:-translate-y-6 group-hover:opacity-100"
+								class="absolute aspect-square w-4 -translate-y-4.5 rotate-45 rounded-xs bg-olive-200 opacity-0 transition-all group-hover:-translate-y-6 group-hover:opacity-100 dark:bg-slate-700"
 							></div>
 							<img
 								class="aspect-square w-4 transition-transform duration-700"
@@ -139,99 +155,116 @@
 					</div>
 				</div>
 				<div class="flex flex-row items-center justify-between">
-					<p class="max-w-8/10 rounded-xl bg-olive-300 p-2">
+					<p class="max-w-8/10 rounded-xl bg-olive-300 p-2 dark:bg-slate-800">
 						{airports.find((x) => x.code == selected)?.name ?? 'No airport selected'}
 					</p>
 					<button
 						onclick={() => {
 							selectOpen = true;
 						}}
-						class="rounded-xl bg-olive-300 p-1 transition-transform hover:scale-105 hover:cursor-pointer"
+						class="rounded-xl bg-olive-300 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-slate-800 dark:text-white"
 						>Select</button
 					>
 				</div>
 			</div>
 			<!-- /SELECTED STATION -->
+			<div class="m-0 flex w-max flex-col items-center justify-center p-0">
+				<div class="mt-3 flex flex-row items-center justify-center gap-1">
+					<button
+						onclick={() => {
+							volume = Math.max(volume - 0.005, 0);
+							setCookie('atcVolume', volume, 1000);
+						}}
+						class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer dark:text-white"
+						>&ndash;</button
+					>
+					<input
+						onchange={() => {
+							setCookie('atcVolume', volume, 1000);
+						}}
+						bind:value={volume}
+						type="range"
+						min="0"
+						max="1"
+						step="0.005"
+					/>
+					<button
+						onclick={() => {
+							volume = Math.min(volume + 0.005, 1);
 
-			<div class="mt-3 flex flex-row items-center justify-center gap-1">
-				<button
-					onclick={() => {
-						volume = Math.max(volume - 0.005, 0);
-						setCookie('atcVolume', volume, 1000);
-					}}
-					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer"
-					>&ndash;</button
-				>
-				<input
-					onchange={() => {
-						setCookie('atcVolume', volume, 1000);
-					}}
-					bind:value={volume}
-					type="range"
-					min="0"
-					max="1"
-					step="0.005"
-				/>
-				<button
-					onclick={() => {
-						volume = Math.min(volume + 0.005, 1);
+							setCookie('atcVolume', volume, 1000);
+						}}
+						class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer dark:text-white"
+						>+</button
+					>
+				</div>
+				<p>ATC: {Math.round(volume * 100)}%</p>
+				<div class="flex flex-row gap-1">
+					<button
+						onclick={() => {
+							musicVolume = Math.max(musicVolume - 0.005, 0);
 
-						setCookie('atcVolume', volume, 1000);
-					}}
-					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer">+</button
-				>
+							setCookie('musicVolume', musicVolume, 1000);
+						}}
+						class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer dark:text-white"
+						>&ndash;</button
+					>
+					<input
+						onchange={() => {
+							setCookie('musicVolume', musicVolume, 1000);
+						}}
+						bind:value={musicVolume}
+						type="range"
+						min="0"
+						max="1"
+						step="0.005"
+					/>
+					<button
+						onclick={() => {
+							musicVolume = Math.min(musicVolume + 0.005, 1);
+
+							setCookie('musicVolume', musicVolume, 1000);
+						}}
+						class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer dark:text-white"
+						>+</button
+					>
+				</div>
+				<p>Music: {Math.round(musicVolume * 100)}%</p>
 			</div>
-			<p>ATC: {Math.round(volume * 100)}%</p>
-			<div class="flex flex-row gap-1">
-				<button
-					onclick={() => {
-						musicVolume = Math.max(musicVolume - 0.005, 0);
-
-						setCookie('musicVolume', musicVolume, 1000);
-					}}
-					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer"
-					>&ndash;</button
-				>
-				<input
-					onchange={() => {
-						setCookie('musicVolume', musicVolume, 1000);
-					}}
-					bind:value={musicVolume}
-					type="range"
-					min="0"
-					max="1"
-					step="0.005"
-				/>
-				<button
-					onclick={() => {
-						musicVolume = Math.min(musicVolume + 0.005, 1);
-
-						setCookie('musicVolume', musicVolume, 1000);
-					}}
-					class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer">+</button
-				>
-			</div>
-			<p>Music: {Math.round(musicVolume * 100)}%</p>
 		</div>
 		<button
 			onclick={togglePlaying}
-			class="mt-3 mb-1 w-4/10 rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer"
+			class="mt-3 mb-1 w-4/10 rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-slate-900 dark:text-white"
 			>{playing ? 'Pause' : 'Play'}</button
 		>
 		<div class="flex flex-row gap-1">
-			<p class="text-xs text-olive-500">Ad playing?</p>
+			<p class="text-xs text-olive-500 dark:text-slate-900!">Ad playing?</p>
 			<button
 				onclick={() => {
 					window.location.reload();
 				}}
-				class="text-xs text-olive-600 hover:cursor-pointer hover:underline">Reload the page</button
+				class="text-xs text-olive-600 hover:cursor-pointer hover:underline dark:text-slate-950!"
+				>Reload the page</button
 			>
 		</div>
 	</div>
 </div>
+<!-- LIGHT DARK -->
+<div
+	class="absolute bottom-5 left-1/2 z-20 flex h-fit w-fit -translate-x-1/2 flex-row items-center justify-center rounded-full bg-olive-300 p-2 dark:bg-slate-700"
+>
+	<button
+		class="rounded-full bg-olive-400 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:scale-85 dark:bg-slate-800 dark:hover:scale-90"
+		onclick={setLight}><img class="aspect-square w-10 dark:invert" src={Sun} /></button
+	>
+	<button
+		class="scale-85 rounded-full bg-olive-400 p-1 transition-transform hover:scale-90 hover:cursor-pointer dark:scale-100 dark:bg-slate-800 dark:hover:scale-105"
+		onclick={setDark}><img class="aspect-square w-10 dark:invert" src={Moon} /></button
+	>
+</div>
 
 <div
-	class="absolute top-0 h-full w-full bg-olive-300 transition-opacity {selectOpen
+	class="absolute top-0 h-full w-full bg-olive-300 transition-opacity dark:bg-slate-800 {selectOpen
 		? 'pointer-events-auto opacity-100'
 		: 'pointer-events-none opacity-0'}"
 >
@@ -251,15 +284,19 @@
 	<!-- SEARCH BAR -->
 	<div class="flex flex-col items-center justify-center gap-2">
 		<input
-			class="h-20 w-2/10 rounded-xl bg-olive-400 px-1 text-2xl uppercase"
+			class="w-2/10 rounded-xl bg-olive-400 p-4 text-2xl uppercase dark:bg-slate-900"
 			maxlength="4"
 			bind:value={searchTerm}
 			type="text"
-			placeholder="KATL, KJFK, ETC."
+			placeholder="KATL, KJFK, EHAM..."
 		/>
 
 		{#if !searchTerm}
-			<p>or</p>
+			<div class="flex flex-row items-center justify-between gap-2">
+				<hr class="w-16" />
+				<p class="">OR</p>
+				<hr class="w-16" />
+			</div>
 			<button
 				onclick={() => {
 					let airport = airports[Math.floor(Math.random() * airports.length)];
@@ -273,7 +310,7 @@
 					}
 					selectOpen = false;
 				}}
-				class="h-20 w-2/10 rounded-2xl bg-olive-400 px-1 text-2xl transition-transform hover:scale-105 hover:cursor-pointer"
+				class="w-2/10 rounded-2xl bg-olive-400 p-4 text-2xl transition-transform hover:scale-105 hover:cursor-pointer dark:bg-slate-900"
 				>Random airport</button
 			>
 		{:else}
@@ -292,7 +329,7 @@
 							selectOpen = false;
 						}}
 						class:border-2={selected == airport?.code}
-						class="flex w-full flex-col justify-baseline rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer"
+						class="flex w-full flex-col justify-baseline rounded-2xl bg-olive-400 p-2 pl-3 transition-transform hover:scale-102 hover:cursor-pointer dark:bg-slate-900"
 					>
 						<p class="self-start font-bold">{airport.code}</p>
 						<p class="self-start">{airport.name}</p>
