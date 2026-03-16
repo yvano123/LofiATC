@@ -89,9 +89,9 @@
 	src="https://boxradio-edge-00.streamafrica.net/lofi"
 ></audio>
 <audio bind:volume bind:this={as} id="as" hidden> </audio>
-<div class="flex h-lvh items-center justify-center bg-olive-100 dark:bg-slate-600">
+<div class="flex h-lvh items-center justify-center bg-olive-100 dark:bg-zinc-900">
 	<div
-		class="flex aspect-square h-6/10 flex-col items-center rounded-2xl bg-olive-300 p-8 dark:bg-slate-800"
+		class="flex aspect-square h-6/10 flex-col items-center rounded-2xl bg-olive-300 p-8 dark:bg-zinc-800"
 	>
 		<div class="flex w-full flex-col items-center">
 			<!-- HEADER -->
@@ -102,7 +102,7 @@
 			<!-- /HEADER -->
 
 			<!-- SELECTED STATION -->
-			<div class="mt-3 w-9/10 rounded-xl bg-olive-400 p-3 dark:bg-slate-900">
+			<div class="mt-3 w-9/10 rounded-xl bg-olive-400 p-3 dark:bg-zinc-700">
 				<div class="flex flex-row items-center justify-between gap-0.5">
 					<div class="flex flex-row gap-1">
 						<p class="pl-2 font-bold">{airports.find((x) => x.code == selected)?.code ?? ''}</p>
@@ -115,20 +115,20 @@
 										? (as.src = as.src.replace('s1-bos', 's1-fmt2'))
 										: as.src;
 							}}
-							class="group relative rounded-full bg-olive-300 p-1 transition-all hover:scale-105 hover:cursor-pointer dark:bg-slate-800 {selected
+							class="group relative rounded-full bg-olive-300 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-800 {selected
 								? 'visible'
 								: 'invisible'}"
 						>
 							<span
-								class="absolute z-20 w-max -translate-x-1/2 -translate-y-7 self-center rounded-md bg-olive-200 p-1 text-xs opacity-0 transition-all group-hover:-translate-y-8.5 group-hover:opacity-100 dark:bg-slate-700"
+								class="absolute z-20 w-max -translate-x-1/2 -translate-y-7 self-center rounded-md bg-olive-200 p-1 text-xs opacity-0 transition-all group-hover:-translate-y-8.5 group-hover:opacity-100 dark:bg-zinc-600 dark:text-white"
 								>Switch server</span
 							>
 							<!-- Arrow -->
 							<div
-								class="absolute aspect-square w-4 -translate-y-4.5 rotate-45 rounded-xs bg-olive-200 opacity-0 transition-all group-hover:-translate-y-6 group-hover:opacity-100 dark:bg-slate-700"
+								class="absolute aspect-square w-4 -translate-y-4.5 rotate-45 rounded-xs bg-olive-200 opacity-0 transition-all group-hover:-translate-y-6 group-hover:opacity-100 dark:bg-zinc-600"
 							></div>
 							<img
-								class="aspect-square w-4 transition-transform duration-700"
+								class="aspect-square w-4 transition-transform duration-700 dark:invert"
 								src={Refresh}
 								style="transform: rotate({rotation}deg);"
 								alt="logo"
@@ -137,10 +137,10 @@
 					</div>
 					<div class="flex flex-row items-center">
 						<p
-							class="text-2xl text-red-500"
+							class="indicator text-2xl text-red-500"
 							class:text-red-500={connected >= 3}
 							class:text-yellow-500={connected < 3 && selected != ''}
-							class:text-gray-500={selected == ''}
+							class:text-gray-600={selected == ''}
 							class:animate-pulse={connected >= 3}
 						>
 							•
@@ -155,14 +155,14 @@
 					</div>
 				</div>
 				<div class="flex flex-row items-center justify-between">
-					<p class="max-w-8/10 rounded-xl bg-olive-300 p-2 dark:bg-slate-800">
+					<p class="max-w-8/10 rounded-xl bg-olive-300 p-2 dark:bg-zinc-800">
 						{airports.find((x) => x.code == selected)?.name ?? 'No airport selected'}
 					</p>
 					<button
 						onclick={() => {
 							selectOpen = true;
 						}}
-						class="rounded-xl bg-olive-300 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-slate-800 dark:text-white"
+						class="rounded-xl bg-olive-300 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-800 dark:text-white"
 						>Select</button
 					>
 				</div>
@@ -234,16 +234,16 @@
 		</div>
 		<button
 			onclick={togglePlaying}
-			class="mt-3 mb-1 w-4/10 rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-slate-900 dark:text-white"
+			class="mt-3 mb-1 w-4/10 rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-700 dark:text-white"
 			>{playing ? 'Pause' : 'Play'}</button
 		>
 		<div class="flex flex-row gap-1">
-			<p class="text-xs text-olive-500 dark:text-slate-900!">Ad playing?</p>
+			<p class="text-xs text-olive-500 dark:text-zinc-900!">Ad playing?</p>
 			<button
 				onclick={() => {
 					window.location.reload();
 				}}
-				class="text-xs text-olive-600 hover:cursor-pointer hover:underline dark:text-slate-950!"
+				class="text-xs text-olive-600 hover:cursor-pointer hover:underline dark:text-zinc-950!"
 				>Reload the page</button
 			>
 		</div>
@@ -251,20 +251,20 @@
 </div>
 <!-- LIGHT DARK -->
 <div
-	class="absolute bottom-5 left-1/2 z-20 flex h-fit w-fit -translate-x-1/2 flex-row items-center justify-center rounded-full bg-olive-300 p-2 dark:bg-slate-700"
+	class="absolute bottom-5 left-1/2 flex h-fit w-fit -translate-x-1/2 flex-row items-center justify-center rounded-full bg-olive-300 p-2 dark:bg-zinc-700"
 >
 	<button
-		class="rounded-full bg-olive-400 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:scale-85 dark:bg-slate-800 dark:hover:scale-90"
+		class="rounded-full bg-olive-400 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:scale-85 dark:bg-zinc-800 dark:hover:scale-90"
 		onclick={setLight}><img class="aspect-square w-10 dark:invert" src={Sun} /></button
 	>
 	<button
-		class="scale-85 rounded-full bg-olive-400 p-1 transition-transform hover:scale-90 hover:cursor-pointer dark:scale-100 dark:bg-slate-800 dark:hover:scale-105"
+		class="scale-85 rounded-full bg-olive-400 p-1 transition-transform hover:scale-90 hover:cursor-pointer dark:scale-100 dark:bg-zinc-800 dark:hover:scale-105"
 		onclick={setDark}><img class="aspect-square w-10 dark:invert" src={Moon} /></button
 	>
 </div>
 
 <div
-	class="absolute top-0 h-full w-full bg-olive-300 transition-opacity dark:bg-slate-800 {selectOpen
+	class="absolute top-0 h-full w-full bg-olive-300 transition-opacity dark:bg-zinc-800 {selectOpen
 		? 'pointer-events-auto opacity-100'
 		: 'pointer-events-none opacity-0'}"
 >
@@ -276,7 +276,7 @@
 					selectOpen = false;
 				}}
 				class="absolute flex transition-transform duration-700 hover:rotate-360 hover:cursor-pointer"
-				><img class="aspect-square w-10" src={Cross} alt="logo" /></button
+				><img class="aspect-square w-10 dark:invert" src={Cross} alt="logo" /></button
 			>
 			<div class="flex h-full w-full items-center justify-center"><p>SELECT AIRPORT</p></div>
 		</div>
@@ -284,7 +284,7 @@
 	<!-- SEARCH BAR -->
 	<div class="flex flex-col items-center justify-center gap-2">
 		<input
-			class="w-2/10 rounded-xl bg-olive-400 p-4 text-2xl uppercase dark:bg-slate-900"
+			class="w-2/10 rounded-xl bg-olive-400 p-4 text-2xl uppercase dark:bg-zinc-900 dark:text-white"
 			maxlength="4"
 			bind:value={searchTerm}
 			type="text"
@@ -310,7 +310,7 @@
 					}
 					selectOpen = false;
 				}}
-				class="w-2/10 rounded-2xl bg-olive-400 p-4 text-2xl transition-transform hover:scale-105 hover:cursor-pointer dark:bg-slate-900"
+				class="w-2/10 rounded-2xl bg-olive-400 p-4 text-2xl transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-900 dark:text-white"
 				>Random airport</button
 			>
 		{:else}
@@ -329,7 +329,7 @@
 							selectOpen = false;
 						}}
 						class:border-2={selected == airport?.code}
-						class="flex w-full flex-col justify-baseline rounded-2xl bg-olive-400 p-2 pl-3 transition-transform hover:scale-102 hover:cursor-pointer dark:bg-slate-900"
+						class="flex w-full flex-col justify-baseline rounded-2xl bg-olive-400 p-2 pl-3 transition-transform hover:scale-102 hover:cursor-pointer dark:border-white dark:bg-zinc-900"
 					>
 						<p class="self-start font-bold">{airport.code}</p>
 						<p class="self-start">{airport.name}</p>

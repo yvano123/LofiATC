@@ -52,7 +52,7 @@ input[type="range"]:focus::-moz-range-thumb{
   outline-offset: 0.125rem;
 }
 
-.dark p{
+.dark p:not(.indicator){
   color:white
 }
 .dark h1{
@@ -66,7 +66,7 @@ input[type="range"]:focus::-moz-range-thumb{
 /******** Chrome, Safari, Opera and Edge Chromium styles ********/
 /* slider track */
 .dark input[type="range"]::-webkit-slider-runnable-track {
-  background-color: #45556c;
+  background-color: #3f3f47;
   border-radius: 0.5rem;
   height: 0.5rem;
 }
@@ -79,25 +79,25 @@ input[type="range"]:focus::-moz-range-thumb{
   width: 1rem;
 }
 .dark input[type="range"]{
-    accent-color: #0f172b;
+    accent-color: #18181b;
 }
 
 .dark input:focus::-webkit-slider-thumb {
-  outline: 3px solid #0f172b;
+  outline: 3px solid #18181b;
   outline-offset: 0.125rem;
 }
 
 /*********** Firefox styles ***********/
 /* slider track */
 .dark input[type="range"]::-moz-range-track {
-  background-color: #45556c;
+  background-color: #3f3f47;
   border-radius: 0.5rem;
   height: 0.5rem;
 }
 
 /* slider thumb */
 .dark input[type="range"]::-moz-range-thumb {
-  background-color: #0f172b;
+  background-color: #18181b;
   border: none; /*Removes extra border that FF applies*/
   border-radius: 0.5rem;
   height: 1rem;
@@ -105,6 +105,6 @@ input[type="range"]:focus::-moz-range-thumb{
 }
 
 .dark input[type="range"]:focus::-moz-range-thumb{
-  outline: 3px solid #0f172b;
+  outline: 3px solid #18181b;
   outline-offset: 0.125rem;
 }
