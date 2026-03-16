@@ -26,12 +26,12 @@ export const airports = [
 	),
 	new Airport(
 		'KATL',
-		'Hartsfield–Jackson Atlanta International Airport',
+		'Hartsfield-Jackson Atlanta International Airport',
 		'https://s1-bos.liveatc.net/katl_twr?nocache=2026031414215433160'
 	),
 	new Airport(
 		'KSEA',
-		'Seattle–Tacoma International Airport',
+		'Seattle-Tacoma International Airport',
 		'https://s1-fmt2.liveatc.net/ksea3_twr_east?nocache=2026031414223667715'
 	),
 	new Airport(

@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { isIfStatement } from 'typescript';
 	import Cross from '$lib/assets/cross.svg';
+	import Refresh from '$lib/assets/refresh.svg';
 
 	let as: HTMLAudioElement;
 	let ms: HTMLAudioElement;
@@ -13,9 +14,7 @@
 	let musicVolume = $state(0.1);
 	let playing = $state(false);
 	let connected = $state(0);
-
-	let crossThing = $state(Cross);
-	const CrossIcon = $derived(crossThing);
+	let rotation = $state(0);
 
 	$effect(() => {
 		if (!selectOpen) searchTerm = '';
@@ -73,7 +72,7 @@
 	bind:volume={musicVolume}
 	controls
 	hidden
-	src="https://live.hunter.fm/lofi_high"
+	src="https://stream-156.zeno.fm/0r0xa792kwzuv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiIwcjB4YTc5Mmt3enV2IiwiaG9zdCI6InN0cmVhbS0xNTYuemVuby5mbSIsInRtIjpmYWxzZSwicnR0bCI6NSwianRpIjoiR3BCWWotQTdRLWVySWZCRFl3VngtUSIsImlhdCI6MTc3MzY0ODc4NCwiZXhwIjoxNzczNjQ4ODQ0fQ.bHPs_T-oxBIAnXL6tCfKaPQATQxxS3p2gXtLxruGiEA"
 ></audio>
 <audio bind:volume bind:this={as} id="as" hidden> </audio>
 <div class="flex h-lvh items-center justify-center bg-olive-100">
@@ -89,7 +88,37 @@
 			<!-- SELECTED STATION -->
 			<div class="mt-3 w-9/10 rounded-xl bg-olive-400 p-3">
 				<div class="flex flex-row items-center justify-between gap-0.5">
-					<p class="pl-2 font-bold">{airports.find((x) => x.code == selected)?.code ?? ''}</p>
+					<div class="flex flex-row gap-1">
+						<p class="pl-2 font-bold">{airports.find((x) => x.code == selected)?.code ?? ''}</p>
+						<button
+							onclick={() => {
+								rotation += 180;
+								as.src.includes('s1-fmt2')
+									? (as.src = as.src.replace('s1-fmt2', 's1-bos'))
+									: as.src.includes('s1-bos')
+										? (as.src = as.src.replace('s1-bos', 's1-fmt2'))
+										: as.src;
+							}}
+							class="group relative rounded-full bg-olive-300 p-1 transition-all hover:scale-105 hover:cursor-pointer {selected
+								? 'visible'
+								: 'invisible'}"
+						>
+							<span
+								class="absolute z-20 w-max -translate-x-1/2 -translate-y-7 self-center rounded-md bg-olive-200 p-1 text-xs opacity-0 transition-all group-hover:-translate-y-8.5 group-hover:opacity-100"
+								>Switch server</span
+							>
+							<!-- Arrow -->
+							<div
+								class="absolute aspect-square w-4 -translate-y-4.5 rotate-45 rounded-xs bg-olive-200 opacity-0 transition-all group-hover:-translate-y-6 group-hover:opacity-100"
+							></div>
+							<img
+								class="aspect-square w-4 transition-transform duration-700"
+								src={Refresh}
+								style="transform: rotate({rotation}deg);"
+								alt="logo"
+							/></button
+						>
+					</div>
 					<div class="flex flex-row items-center">
 						<p
 							class="text-2xl text-red-500"
@@ -262,7 +291,7 @@
 						class:border-2={selected == airport?.code}
 						class="flex w-full flex-col justify-baseline rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer"
 					>
-						<p class="self-start">{airport.code}</p>
+						<p class="self-start font-bold">{airport.code}</p>
 						<p class="self-start">{airport.name}</p>
 					</button>
 				{/each}
