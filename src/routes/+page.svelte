@@ -11,7 +11,7 @@
 	let ms: HTMLAudioElement;
 	let searchTerm = $state('');
 	let selectOpen = $state(false);
-	let selected = $state('');
+	let selected = $state('EHAM');
 	let volume = $state(0.5);
 	let musicVolume = $state(0.1);
 	let playing = $state(false);
@@ -76,6 +76,10 @@
 
 		let dark = localStorage.getItem('darkmode') === 'true';
 		document.documentElement.classList.toggle('dark', dark);
+
+		if (selected) {
+			as.src = airports.find((x) => x.code == selected)?.uri ?? '';
+		}
 	});
 
 	setInterval(checkStates, 50);
@@ -162,7 +166,7 @@
 						onclick={() => {
 							selectOpen = true;
 						}}
-						class="rounded-xl bg-olive-300 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-800 dark:text-white"
+						class="rounded-xl bg-olive-300 p-1 px-2.5 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-800 dark:text-white"
 						>Select</button
 					>
 				</div>
@@ -238,12 +242,12 @@
 			>{playing ? 'Pause' : 'Play'}</button
 		>
 		<div class="flex flex-row gap-1">
-			<p class="text-xs text-olive-500 dark:text-zinc-900!">Ad playing?</p>
+			<p class="text-xs text-olive-500 dark:text-zinc-700!">Ad playing?</p>
 			<button
 				onclick={() => {
 					window.location.reload();
 				}}
-				class="text-xs text-olive-600 hover:cursor-pointer hover:underline dark:text-zinc-950!"
+				class="text-xs text-olive-600 hover:cursor-pointer hover:underline dark:text-zinc-600!"
 				>Reload the page</button
 			>
 		</div>
@@ -251,7 +255,7 @@
 </div>
 <!-- LIGHT DARK -->
 <div
-	class="absolute bottom-5 left-1/2 flex h-fit w-fit -translate-x-1/2 flex-row items-center justify-center rounded-full bg-olive-300 p-2 dark:bg-zinc-700"
+	class="absolute bottom-5 left-1/2 flex h-fit w-fit -translate-x-1/2 scale-75 flex-row items-center justify-center rounded-full bg-olive-300 p-2 dark:bg-zinc-700"
 >
 	<button
 		class="rounded-full bg-olive-400 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:scale-85 dark:bg-zinc-800 dark:hover:scale-90"
@@ -293,9 +297,9 @@
 
 		{#if !searchTerm}
 			<div class="flex flex-row items-center justify-between gap-2">
-				<hr class="w-16" />
+				<hr class="w-16 dark:text-white" />
 				<p class="">OR</p>
-				<hr class="w-16" />
+				<hr class="w-16 dark:text-white" />
 			</div>
 			<button
 				onclick={() => {
