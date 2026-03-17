@@ -52,12 +52,16 @@ input[type="range"]:focus::-moz-range-thumb{
   outline-offset: 0.125rem;
 }
 
-.dark h2, p:not(.indicator){
+.dark p:not(.indicator){
   color:white
 }
 .dark h1{
   color:white
 }
+.dark h2{
+  color:white
+}
+
 
 .dark input[type="range"]:focus {
   outline: none;
