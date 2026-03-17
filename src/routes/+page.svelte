@@ -95,7 +95,7 @@
 <audio bind:volume bind:this={as} id="as" hidden> </audio>
 <div class="flex h-lvh items-center justify-center bg-olive-100 dark:bg-zinc-900">
 	<div
-		class="flex aspect-square h-6/10 flex-col items-center rounded-2xl bg-olive-300 p-8 dark:bg-zinc-800"
+		class="flex w-9/10 max-w-100 flex-col items-center rounded-2xl bg-olive-300 p-2 py-4 sm:w-7/10 md:w-6/10 lg:w-6/20 lg:min-w-100 lg:p-8 dark:bg-zinc-800"
 	>
 		<div class="flex w-full flex-col items-center">
 			<!-- HEADER -->
@@ -106,7 +106,7 @@
 			<!-- /HEADER -->
 
 			<!-- SELECTED STATION -->
-			<div class="mt-3 w-9/10 rounded-xl bg-olive-400 p-3 dark:bg-zinc-700">
+			<div class="mt-3 w-17/20 rounded-xl bg-olive-400 p-3 lg:w-9/10 dark:bg-zinc-700">
 				<div class="flex flex-row items-center justify-between gap-0.5">
 					<div class="flex flex-row gap-1">
 						<p class="pl-2 font-bold">{airports.find((x) => x.code == selected)?.code ?? ''}</p>
@@ -158,7 +158,7 @@
 						</p>
 					</div>
 				</div>
-				<div class="flex flex-row items-center justify-between">
+				<div class="flex max-w-10/10 flex-row items-center justify-between gap-1">
 					<p class="max-w-8/10 rounded-xl bg-olive-300 p-2 dark:bg-zinc-800">
 						{airports.find((x) => x.code == selected)?.name ?? 'No airport selected'}
 					</p>
@@ -282,13 +282,13 @@
 				class="absolute flex transition-transform duration-700 hover:rotate-360 hover:cursor-pointer"
 				><img class="aspect-square w-10 dark:invert" src={Cross} alt="logo" /></button
 			>
-			<div class="flex h-full w-full items-center justify-center"><p>SELECT AIRPORT</p></div>
+			<div class="flex h-full w-full items-center justify-center"><h2>SELECT AIRPORT</h2></div>
 		</div>
 	</div>
 	<!-- SEARCH BAR -->
 	<div class="flex flex-col items-center justify-center gap-2">
 		<input
-			class="w-2/10 rounded-xl bg-olive-400 p-4 text-2xl uppercase dark:bg-zinc-900 dark:text-white"
+			class="w-7/10 max-w-70 rounded-xl bg-olive-400 p-4 text-2xl uppercase sm:w-3/10 sm:max-w-85 sm:min-w-70 dark:bg-zinc-900 dark:text-white"
 			maxlength="4"
 			bind:value={searchTerm}
 			type="text"
@@ -314,11 +314,11 @@
 					}
 					selectOpen = false;
 				}}
-				class="w-2/10 rounded-2xl bg-olive-400 p-4 text-2xl transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-900 dark:text-white"
+				class="w-7/10 max-w-70 rounded-2xl bg-olive-400 p-4 text-2xl transition-transform hover:scale-105 hover:cursor-pointer sm:w-3/10 sm:max-w-85 sm:min-w-70 dark:bg-zinc-900 dark:text-white"
 				>Random airport</button
 			>
 		{:else}
-			<div class="flex h-3/10 w-3/10 flex-col gap-1.5 p-4">
+			<div class="flex h-3/10 w-7/10 flex-col items-center justify-center gap-1.5 p-4 lg:w-3/10">
 				{#each airports.filter((x) => x.code.includes(searchTerm.toUpperCase())) as airport}
 					<button
 						onclick={() => {
@@ -333,10 +333,10 @@
 							selectOpen = false;
 						}}
 						class:border-2={selected == airport?.code}
-						class="flex w-full flex-col justify-baseline rounded-2xl bg-olive-400 p-2 pl-3 transition-transform hover:scale-102 hover:cursor-pointer dark:border-white dark:bg-zinc-900"
+						class="flex w-full flex-col justify-baseline rounded-2xl bg-olive-400 p-2 pl-3 transition-transform hover:scale-102 hover:cursor-pointer sm:max-w-90 dark:border-white dark:bg-zinc-900"
 					>
 						<p class="self-start font-bold">{airport.code}</p>
-						<p class="self-start">{airport.name}</p>
+						<p class="self-start text-left">{airport.name}</p>
 					</button>
 				{/each}
 			</div>
