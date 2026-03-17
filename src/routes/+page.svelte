@@ -11,7 +11,7 @@
 	let ms: HTMLAudioElement;
 	let searchTerm = $state('');
 	let selectOpen = $state(false);
-	let selected = $state('EHAM');
+	let selected = $state('KATL');
 	let volume = $state(0.5);
 	let musicVolume = $state(0.1);
 	let playing = $state(false);
@@ -101,7 +101,7 @@
 			<!-- HEADER -->
 
 			<div class="flex w-full flex-row items-center justify-center">
-				<h1 class="text-4xl">LofiATC</h1>
+				<h1 class="text-4xl">Lofi ATC</h1>
 			</div>
 			<!-- /HEADER -->
 
@@ -125,7 +125,7 @@
 						>
 							<span
 								class="absolute z-20 w-max -translate-x-1/2 -translate-y-7 self-center rounded-md bg-olive-200 p-1 text-xs opacity-0 transition-all group-hover:-translate-y-8.5 group-hover:opacity-100 dark:bg-zinc-600 dark:text-white"
-								>Switch server</span
+								>Switch ATC server</span
 							>
 							<!-- Arrow -->
 							<div
@@ -135,7 +135,7 @@
 								class="aspect-square w-4 transition-transform duration-700 dark:invert"
 								src={Refresh}
 								style="transform: rotate({rotation}deg);"
-								alt="logo"
+								alt="Switch ATC Server"
 							/></button
 						>
 					</div>
@@ -259,11 +259,13 @@
 >
 	<button
 		class="rounded-full bg-olive-400 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:scale-85 dark:bg-zinc-800 dark:hover:scale-90"
-		onclick={setLight}><img class="aspect-square w-10 dark:invert" src={Sun} /></button
+		onclick={setLight}
+		><img alt="Toggle light-mode" class="aspect-square w-10 dark:invert" src={Sun} /></button
 	>
 	<button
 		class="scale-85 rounded-full bg-olive-400 p-1 transition-transform hover:scale-90 hover:cursor-pointer dark:scale-100 dark:bg-zinc-800 dark:hover:scale-105"
-		onclick={setDark}><img class="aspect-square w-10 dark:invert" src={Moon} /></button
+		onclick={setDark}
+		><img alt="Toggle dark-mode" class="aspect-square w-10 dark:invert" src={Moon} /></button
 	>
 </div>
 
@@ -280,7 +282,7 @@
 					selectOpen = false;
 				}}
 				class="absolute flex transition-transform duration-700 hover:rotate-360 hover:cursor-pointer"
-				><img class="aspect-square w-10 dark:invert" src={Cross} alt="logo" /></button
+				><img class="aspect-square w-10 dark:invert" src={Cross} alt="Close" /></button
 			>
 			<div class="flex h-full w-full items-center justify-center"><h2>SELECT AIRPORT</h2></div>
 		</div>
