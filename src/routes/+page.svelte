@@ -242,12 +242,12 @@
 			>{playing ? 'Pause' : 'Play'}</button
 		>
 		<div class="flex flex-row gap-1">
-			<p class="text-xs text-olive-500 dark:text-zinc-700!">Ad playing?</p>
+			<p class="text-xs text-olive-600 dark:text-zinc-500!">Ad playing?</p>
 			<button
 				onclick={() => {
 					window.location.reload();
 				}}
-				class="text-xs text-olive-600 hover:cursor-pointer hover:underline dark:text-zinc-600!"
+				class="text-xs text-olive-700 hover:cursor-pointer hover:underline dark:text-zinc-400!"
 				>Reload the page</button
 			>
 		</div>
@@ -255,7 +255,7 @@
 </div>
 <!-- LIGHT DARK -->
 <div
-	class="absolute bottom-5 left-1/2 flex h-fit w-fit -translate-x-1/2 scale-75 flex-row items-center justify-center rounded-full bg-olive-300 p-2 dark:bg-zinc-700"
+	class="absolute bottom-1/50 left-1/2 flex h-fit w-fit -translate-x-1/2 scale-75 flex-row items-center justify-center rounded-full bg-olive-300 p-2 dark:bg-zinc-700"
 >
 	<button
 		class="rounded-full bg-olive-400 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:scale-85 dark:bg-zinc-800 dark:hover:scale-90"
