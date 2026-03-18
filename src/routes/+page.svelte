@@ -17,6 +17,8 @@
 	let playing = $state(false);
 	let connected = $state(0);
 	let rotation = $state(0);
+	let searchMode = $state(0);
+	let error = $state(0);
 
 	$effect(() => {
 		if (!selectOpen) searchTerm = '';
@@ -65,7 +67,6 @@
 			playing = false;
 		}
 	}
-	let player;
 	onMount(() => {
 		let mv = getCookie('musicVolume');
 		let av = getCookie('atcVolume');
@@ -83,6 +84,15 @@
 	});
 
 	setInterval(checkStates, 50);
+
+	function switchServer() {
+		rotation += 360;
+		as.src.includes('s1-fmt2')
+			? (as.src = as.src.replace('s1-fmt2', 's1-bos'))
+			: as.src.includes('s1-bos')
+				? (as.src = as.src.replace('s1-bos', 's1-fmt2'))
+				: as.src;
+	}
 </script>
 
 <audio
@@ -92,7 +102,20 @@
 	hidden
 	src="https://boxradio-edge-00.streamafrica.net/lofi"
 ></audio>
-<audio bind:volume bind:this={as} id="as" hidden> </audio>
+<audio
+	bind:volume
+	oncanplay={() => {
+		error = 0;
+	}}
+	onerror={() => {
+		error == 0 ? (error = 1) : (error = 2);
+		if (error < 2) switchServer();
+	}}
+	bind:this={as}
+	id="as"
+	hidden
+>
+</audio>
 <div class="flex h-lvh items-center justify-center bg-olive-100 dark:bg-zinc-900">
 	<div
 		class="flex w-9/10 max-w-100 flex-col items-center rounded-2xl bg-olive-300 p-2 py-4 sm:w-7/10 md:w-6/10 lg:w-6/20 lg:min-w-100 lg:p-8 dark:bg-zinc-800"
@@ -112,12 +135,7 @@
 						<p class="pl-2 font-bold">{airports.find((x) => x.code == selected)?.code ?? ''}</p>
 						<button
 							onclick={() => {
-								rotation += 360;
-								as.src.includes('s1-fmt2')
-									? (as.src = as.src.replace('s1-fmt2', 's1-bos'))
-									: as.src.includes('s1-bos')
-										? (as.src = as.src.replace('s1-bos', 's1-fmt2'))
-										: as.src;
+								switchServer();
 							}}
 							class="group relative rounded-full bg-olive-300 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-800 {selected
 								? 'visible'
@@ -139,12 +157,12 @@
 							/></button
 						>
 					</div>
-					<div class="flex flex-row items-center">
+					<div class="flex flex-row items-center gap-0.5">
 						<p
 							class="indicator text-2xl text-red-500"
 							class:text-red-500={connected >= 3}
-							class:text-yellow-500={connected < 3 && selected != ''}
-							class:text-gray-600={selected == ''}
+							class:text-yellow-500={connected < 3 && selected != '' && error < 2}
+							class:text-gray-600={selected == '' || error == 2}
 							class:animate-pulse={connected >= 3}
 						>
 							•
@@ -153,7 +171,13 @@
 							{connected < 3 && selected == ''
 								? 'No connection'
 								: connected < 3
-									? 'Connecting'
+									? error == 0
+										? 'Connecting'
+										: error == 1
+											? 'Switching'
+											: error == 2
+												? 'Unavailable'
+												: ''
 									: 'LIVE'}
 						</p>
 					</div>
@@ -290,12 +314,23 @@
 	<!-- SEARCH BAR -->
 	<div class="flex flex-col items-center justify-center gap-2">
 		<input
-			class="w-7/10 max-w-70 rounded-xl bg-olive-400 p-4 text-2xl uppercase sm:w-3/10 sm:max-w-85 sm:min-w-70 dark:bg-zinc-900 dark:text-white"
-			maxlength="4"
+			class="w-7/10 max-w-70 rounded-xl bg-olive-400 p-4 text-2xl sm:w-4/10 sm:max-w-85 sm:min-w-70 dark:bg-zinc-900 dark:text-white {searchMode ==
+			0
+				? 'uppercase'
+				: ''}"
+			maxlength={searchMode == 0 ? 4 : 50}
 			bind:value={searchTerm}
 			type="text"
-			placeholder="KATL, KJFK, EHAM..."
+			placeholder={searchMode == 0 ? 'ICAO Code' : 'Airport name'}
 		/>
+		<button
+			onclick={() => {
+				searchMode == 0 ? (searchMode = 1) : (searchMode = 0);
+				searchTerm = '';
+			}}
+			class=" max-w-7/10 rounded-2xl bg-olive-400 p-2 px-3 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-900 dark:text-white"
+			>Search by {searchMode == 0 ? 'Airport Name' : 'ICAO Code'}</button
+		>
 
 		{#if !searchTerm}
 			<div class="flex flex-row items-center justify-between gap-2">
@@ -321,7 +356,14 @@
 			>
 		{:else}
 			<div class="flex h-3/10 w-7/10 flex-col items-center justify-center gap-1.5 p-4 lg:w-3/10">
-				{#each airports.filter((x) => x.code.includes(searchTerm.toUpperCase())) as airport}
+				{#each airports
+					.filter((x) => {
+						if (searchMode == 0) return x.code.includes(searchTerm.toUpperCase());
+						else {
+							return x.name.toLowerCase().includes(searchTerm.toLowerCase());
+						}
+					})
+					.slice(0, 6) as airport}
 					<button
 						onclick={() => {
 							if (as.paused) {
@@ -338,9 +380,24 @@
 						class="flex w-full flex-col justify-baseline rounded-2xl bg-olive-400 p-2 pl-3 transition-transform hover:scale-102 hover:cursor-pointer sm:max-w-90 dark:border-white dark:bg-zinc-900"
 					>
 						<p class="self-start font-bold">{airport.code}</p>
-						<p class="self-start text-left">{airport.name}</p>
+						<p class="w-9/10 self-start truncate text-left">{airport.name}</p>
 					</button>
 				{/each}
+				{#if airports.filter((x) => {
+					if (searchMode == 0) return x.code.includes(searchTerm.toUpperCase());
+					else {
+						return x.name.toLowerCase().includes(searchTerm.toLowerCase());
+					}
+				}).length > 6}
+					<p>
+						6/{airports.filter((x) => {
+							if (searchMode == 0) return x.code.includes(searchTerm.toUpperCase());
+							else {
+								return x.name.toLowerCase().includes(searchTerm.toLowerCase());
+							}
+						}).length} results
+					</p>
+				{/if}
 			</div>
 		{/if}
 	</div>
