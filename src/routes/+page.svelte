@@ -255,7 +255,7 @@
 </div>
 <!-- LIGHT DARK -->
 <div
-	class="absolute bottom-1/50 left-1/2 flex h-fit w-fit -translate-x-1/2 scale-75 flex-row items-center justify-center rounded-full bg-olive-300 p-2 dark:bg-zinc-700"
+	class="absolute bottom-1/50 left-1/2 flex h-fit w-fit -translate-x-1/2 scale-75 flex-row items-center justify-center gap-0.5 rounded-full bg-olive-300 p-2 dark:bg-zinc-700"
 >
 	<button
 		class="rounded-full bg-olive-400 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:scale-85 dark:bg-zinc-800 dark:hover:scale-90"
