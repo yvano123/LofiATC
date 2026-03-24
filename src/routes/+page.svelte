@@ -6,6 +6,8 @@
 	import Sun from '$lib/assets/sun.svg';
 	import Moon from '$lib/assets/moon.svg';
 	import Refresh from '$lib/assets/refresh.svg';
+	import Arrow from '$lib/assets/arrow.svg';
+	import { radioStations } from '$lib/Constants/RadioStations';
 
 	let as: HTMLAudioElement;
 	let ms: HTMLAudioElement;
@@ -13,12 +15,15 @@
 	let selectOpen = $state(false);
 	let selected = $state('KATL');
 	let volume = $state(0.5);
-	let musicVolume = $state(0.1);
+	let musicVolume = $state(0.5);
 	let playing = $state(false);
 	let connected = $state(0);
+	let mConnected = $state(0);
 	let rotation = $state(0);
 	let searchMode = $state(0);
 	let error = $state(0);
+	let selectedRadio = $state('');
+	let radioSelectOpen = $state(false);
 
 	$effect(() => {
 		if (!selectOpen) searchTerm = '';
@@ -35,6 +40,7 @@
 	}
 	function checkStates() {
 		connected = as?.readyState;
+		mConnected = ms?.readyState;
 		playing = !as?.paused || !ms?.paused;
 	}
 	function setCookie(name: string, value: any, days: number) {
@@ -70,10 +76,14 @@
 	onMount(() => {
 		let mv = getCookie('musicVolume');
 		let av = getCookie('atcVolume');
+		let stat = getCookie('station');
+
+		selectedRadio = stat ?? radioStations[0].name;
+
+		ms.src = radioStations.find((x) => x.name == selectedRadio)!.uri;
 
 		if (mv != null) musicVolume = Number.parseFloat(mv);
 		if (av != null) volume = Number.parseFloat(av);
-		console.log(mv, av);
 
 		let dark = localStorage.getItem('darkmode') === 'true';
 		document.documentElement.classList.toggle('dark', dark);
@@ -81,6 +91,10 @@
 		if (selected) {
 			as.src = airports.find((x) => x.code == selected)?.uri ?? '';
 		}
+		document.addEventListener('click', (e) => {
+			const select = document.querySelector('.selectradio');
+			if (!select?.contains(e.target as Node)) radioSelectOpen = false;
+		});
 	});
 
 	setInterval(checkStates, 50);
@@ -95,13 +109,7 @@
 	}
 </script>
 
-<audio
-	bind:this={ms}
-	bind:volume={musicVolume}
-	controls
-	hidden
-	src="https://boxradio-edge-00.streamafrica.net/lofi"
-></audio>
+<audio bind:this={ms} bind:volume={musicVolume} controls hidden></audio>
 <audio
 	bind:volume
 	oncanplay={() => {
@@ -196,6 +204,59 @@
 				</div>
 			</div>
 			<!-- /SELECTED STATION -->
+			<!-- SELECTED RADIO -->
+			<div class="mt-3 w-17/20 rounded-xl bg-olive-400 p-3 lg:w-9/10 dark:bg-zinc-700">
+				<div class="selectradio relative w-full transition-transform select-none">
+					<button
+						onclick={() => {
+							radioSelectOpen = !radioSelectOpen;
+						}}
+						class="flex w-full flex-row justify-between rounded-xl bg-olive-300 p-2 px-3 hover:cursor-pointer dark:bg-zinc-600"
+					>
+						<div class="flex flex-row items-center gap-1">
+							<p>{selectedRadio}</p>
+							<img
+								alt="spinner"
+								src={Refresh}
+								class:scale-100={mConnected < 3 && selectedRadio}
+								class="w-4 scale-0 animate-spin transition-transform dark:invert"
+							/>
+						</div>
+
+						<img
+							src={Arrow}
+							class:-scale-100={radioSelectOpen}
+							class="aspect-square w-6 transition-transform duration-300 dark:invert"
+							alt="arrow"
+						/>
+					</button>
+					<div
+						class="absolute flex w-full flex-col items-center justify-center gap-1 rounded-b-2xl bg-olive-400 p-3 dark:bg-zinc-700"
+						class:hidden={!radioSelectOpen}
+					>
+						{#each radioStations.filter((x) => x.name != selectedRadio) as station}
+							<button
+								onclick={() => {
+									if (ms.paused) {
+										ms.src = station.uri;
+										selectedRadio = station.name;
+									} else {
+										ms.src = station.uri;
+										selectedRadio = station.name;
+										ms.play();
+									}
+									radioSelectOpen = false;
+								}}
+								class="w-9/10 rounded-xl bg-olive-300 p-2 text-center transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-600 dark:text-white"
+							>
+								{station.name}
+							</button>
+						{/each}
+					</div>
+				</div>
+			</div>
+			<!-- /SELECTED RADIO -->
+
 			<div class="m-0 flex w-max flex-col items-center justify-center p-0">
 				<div class="mt-3 flex flex-row items-center justify-center gap-1">
 					<button
