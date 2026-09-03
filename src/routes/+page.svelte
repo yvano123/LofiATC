@@ -326,16 +326,6 @@
 			class="mt-3 mb-1 w-4/10 rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-700 dark:text-white"
 			>{playing ? 'Pause' : 'Play'}</button
 		>
-		<div class="flex flex-row gap-1">
-			<p class="text-xs text-olive-600 dark:text-zinc-500!">Ad playing?</p>
-			<button
-				onclick={() => {
-					window.location.reload();
-				}}
-				class="text-xs text-olive-700 hover:cursor-pointer hover:underline dark:text-zinc-400!"
-				>Reload the page</button
-			>
-		</div>
 	</div>
 </div>
 <!-- LIGHT DARK -->
