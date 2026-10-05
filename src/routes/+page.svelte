@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { airports } from '$lib/Constants/Airports';
 	import { onMount } from 'svelte';
-	import { isIfStatement } from 'typescript';
 	import Cross from '$lib/assets/cross.svg';
 	import Sun from '$lib/assets/sun.svg';
 	import Moon from '$lib/assets/moon.svg';
 	import Refresh from '$lib/assets/refresh.svg';
+	import Settings from '$lib/assets/settings.svg';
 	import Arrow from '$lib/assets/arrow.svg';
 	import { radioStations } from '$lib/Constants/RadioStations';
 
@@ -99,6 +99,8 @@
 
 	setInterval(checkStates, 50);
 
+	function openSettings() {}
+
 	function switchServer() {
 		rotation += 360;
 		as.src.includes('s1-fmt2')
@@ -125,6 +127,11 @@
 >
 </audio>
 <div class="flex h-lvh items-center justify-center bg-olive-100 dark:bg-zinc-900">
+	<button
+		class="absolute right-1 bottom-1/50 h-fit w-fit rounded-full bg-olive-300 p-1 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-700"
+		onclick={openSettings}
+		><img alt="Toggle dark-mode" class="aspect-square w-10 dark:invert" src={Settings} /></button
+	>
 	<div
 		class="flex w-9/10 max-w-100 flex-col items-center rounded-2xl bg-olive-300 p-2 py-4 sm:w-7/10 md:w-6/10 lg:w-6/20 lg:min-w-100 lg:p-8 dark:bg-zinc-800"
 	>
@@ -231,7 +238,7 @@
 						/>
 					</button>
 					<div
-						class="absolute flex w-full flex-col items-center justify-center gap-1 rounded-b-2xl bg-olive-400 p-3 dark:bg-zinc-700"
+						class="absolute grid w-full grid-cols-2 items-center justify-center gap-1 rounded-b-2xl bg-olive-400 p-3 dark:bg-zinc-700"
 						class:hidden={!radioSelectOpen}
 					>
 						{#each radioStations.filter((x) => x.name != selectedRadio) as station}
@@ -247,7 +254,8 @@
 									}
 									radioSelectOpen = false;
 								}}
-								class="w-9/10 rounded-xl bg-olive-300 p-2 text-center transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-600 dark:text-white"
+								class:col-span-2={station.name.length > 12}
+								class=" w-full rounded-xl bg-olive-300 p-2 text-center transition-transform hover:scale-102 hover:cursor-pointer dark:bg-zinc-600 dark:text-white"
 							>
 								{station.name}
 							</button>
@@ -256,74 +264,10 @@
 				</div>
 			</div>
 			<!-- /SELECTED RADIO -->
-
-			<div class="m-0 flex w-max flex-col items-center justify-center p-0">
-				<div class="mt-3 flex flex-row items-center justify-center gap-1">
-					<button
-						onclick={() => {
-							volume = Math.max(volume - 0.005, 0);
-							setCookie('atcVolume', volume, 1000);
-						}}
-						class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer dark:text-white"
-						>&ndash;</button
-					>
-					<input
-						onchange={() => {
-							setCookie('atcVolume', volume, 1000);
-						}}
-						bind:value={volume}
-						type="range"
-						min="0"
-						max="1"
-						step="0.005"
-					/>
-					<button
-						onclick={() => {
-							volume = Math.min(volume + 0.005, 1);
-
-							setCookie('atcVolume', volume, 1000);
-						}}
-						class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer dark:text-white"
-						>+</button
-					>
-				</div>
-				<p>ATC: {Math.round(volume * 100)}%</p>
-				<div class="flex flex-row gap-1">
-					<button
-						onclick={() => {
-							musicVolume = Math.max(musicVolume - 0.005, 0);
-
-							setCookie('musicVolume', musicVolume, 1000);
-						}}
-						class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer dark:text-white"
-						>&ndash;</button
-					>
-					<input
-						onchange={() => {
-							setCookie('musicVolume', musicVolume, 1000);
-						}}
-						bind:value={musicVolume}
-						type="range"
-						min="0"
-						max="1"
-						step="0.005"
-					/>
-					<button
-						onclick={() => {
-							musicVolume = Math.min(musicVolume + 0.005, 1);
-
-							setCookie('musicVolume', musicVolume, 1000);
-						}}
-						class="mb-1 text-xl transition-transform hover:scale-120 hover:cursor-pointer dark:text-white"
-						>+</button
-					>
-				</div>
-				<p>Music: {Math.round(musicVolume * 100)}%</p>
-			</div>
 		</div>
 		<button
 			onclick={togglePlaying}
-			class="mt-3 mb-1 w-4/10 rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-700 dark:text-white"
+			class="mt-5 mb-1 w-4/10 rounded-2xl bg-olive-400 p-2 transition-transform hover:scale-105 hover:cursor-pointer dark:bg-zinc-700 dark:text-white"
 			>{playing ? 'Pause' : 'Play'}</button
 		>
 	</div>
@@ -366,7 +310,7 @@
 	<div class="flex flex-col items-center justify-center gap-2">
 		<input
 			class="w-7/10 max-w-70 rounded-xl bg-olive-400 p-4 text-2xl sm:w-4/10 sm:max-w-85 sm:min-w-70 dark:bg-zinc-900 dark:text-white {searchMode ==
-			0
+				0 && searchTerm != ''
 				? 'uppercase'
 				: ''}"
 			maxlength={searchMode == 0 ? 4 : 50}
